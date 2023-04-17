@@ -255,7 +255,7 @@ const generateForm = (options, parentKey, levels = 0) => Object.entries(options)
     switch (option.type) {
         case 'textarea':
             inputElement = h('textarea', {
-                placeholder: 'default server value',
+                placeholder: '服务器默认值',
                 value: inputValue,
                 onInput: (e) => {
                     const trimmedInputValue = e.target.value.trim();
