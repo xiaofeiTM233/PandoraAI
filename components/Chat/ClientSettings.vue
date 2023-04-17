@@ -33,17 +33,17 @@ const availableOptions = {
     chatgpt: {
         stream: {
             type: 'checkbox',
-            label: 'Stream Responses',
+            label: '流式传输',
             default: true,
         },
         shouldGenerateTitle: {
             type: 'checkbox',
-            label: 'Automatically Generate Titles',
+            label: '自动生成标题',
             default: true,
         },
         clientOptions: {
             type: 'nested',
-            label: 'Client Options',
+            label: '客户端设置',
             properties: {
                 openaiApiKey: {
                     type: 'text',
@@ -51,37 +51,37 @@ const availableOptions = {
                 },
                 reverseProxyUrl: {
                     type: 'text',
-                    label: 'Reverse Proxy URL',
+                    label: '反代 URL',
                 },
                 maxContextTokens: {
                     type: 'number',
-                    label: 'Max Context Tokens',
+                    label: '最大上下文令牌',
                     min: 1,
                 },
                 maxPromptTokens: {
                     type: 'number',
-                    label: 'Max Prompt Tokens',
+                    label: '最大提示令牌',
                     min: 1,
                 },
                 userLabel: {
                     type: 'text',
-                    label: "User's Name",
+                    label: "User名称",
                 },
                 chatGptLabel: {
                     type: 'text',
-                    label: "AI's Name",
+                    label: "AI名称",
                 },
                 promptPrefix: {
                     type: 'textarea',
-                    label: 'Instructions (Prompt Prefix)',
+                    label: '使用说明（提示前缀）',
                 },
                 modelOptions: {
                     type: 'nested',
-                    label: 'Model Options',
+                    label: '模型设置',
                     properties: {
                         model: {
                             type: 'text',
-                            label: 'Model',
+                            label: '模型',
                         },
                         temperature: {
                             type: 'range',
@@ -126,20 +126,20 @@ const availableOptions = {
     'chatgpt-browser': {
         stream: {
             type: 'checkbox',
-            label: 'Stream Responses',
+            label: '流式传输',
             default: true,
         },
         clientOptions: {
             type: 'nested',
-            label: 'Client Options',
+            label: '客户端设置',
             properties: {
                 reverseProxyUrl: {
                     type: 'text',
-                    label: 'Reverse Proxy URL',
+                    label: '反代 URL',
                 },
                 accessToken: {
                     type: 'textarea',
-                    label: 'Access Token',
+                    label: '访问令牌',
                 },
                 cookies: {
                     type: 'textarea',
@@ -151,38 +151,38 @@ const availableOptions = {
     bing: {
         stream: {
             type: 'checkbox',
-            label: 'Stream Responses',
+            label: '流式传输',
             default: true,
         },
         jailbreakMode: {
             type: 'checkbox',
-            label: 'Jailbreak Mode',
+            label: '越狱模式',
         },
         toneStyle: {
             type: 'select',
-            label: 'Tone Style',
+            label: '语气风格',
             options: [
                 {
-                    label: 'Creative',
+                    label: '创意',
                     value: 'creative',
                 },
                 {
-                    label: 'Balanced',
+                    label: '平衡',
                     value: 'balanced',
                 },
                 {
-                    label: 'Precise',
+                    label: '精确',
                     value: 'precise',
                 },
             ],
         },
         clientOptions: {
             type: 'nested',
-            label: 'Client Options',
+            label: '客户端设置',
             properties: {
                 host: {
                     type: 'text',
-                    label: 'Host (e.g. https://cn.bing.com)',
+                    label: 'Host (例如: https://cn.bing.com)',
                 },
                 cookies: {
                     type: 'textarea',
@@ -201,7 +201,7 @@ const {
     setActivePresetName,
 } = presetStore;
 
-// computed default saveAsName based on client, using switch
+// 根据客户端使用 'switch' 选择默认 'saveAsName'
 const defaultSaveAsName = computed(() => {
     if (!props.client) {
         return '';
@@ -217,7 +217,7 @@ const defaultSaveAsName = computed(() => {
         case 'bing':
             return 'Bing';
         default:
-            throw new Error('Invalid client');
+            throw new Error('无效的客户端');
     }
 });
 
@@ -225,7 +225,7 @@ const saveAsName = ref(defaultSaveAsName.value);
 
 const formClientOptions = ref({});
 
-// Recursive form generation component
+// 递归表单生成组件
 const generateForm = (options, parentKey, levels = 0) => Object.entries(options).map(([key]) => {
     const option = options[key];
     let optionKey;
@@ -240,7 +240,7 @@ const generateForm = (options, parentKey, levels = 0) => Object.entries(options)
             ...generateForm(option.properties, optionKey, levels + 1),
         ]);
     }
-    // other types like text, range, checkbox etc.
+    // 其他类型，如文本，范围，复选框等。
     let classList = 'w-full placeholder-white/40 text-slate-300 text-sm rounded py-2 focus:outline-none';
     switch (option.type) {
         case 'range':
@@ -295,14 +295,14 @@ const generateForm = (options, parentKey, levels = 0) => Object.entries(options)
                 },
                 class: classList,
             }, [
-                h('option', { value: '' }, 'default server value'),
+                h('option', { value: '' }, '服务器默认值'),
                 ...option.options.map(_option => h('option', { value: _option.value }, _option.label)),
             ]);
             break;
         default:
             inputElement = h('input', {
                 type: option.type,
-                placeholder: 'default server value',
+                placeholder: '服务器默认值',
                 value: inputValue,
                 min: option.min,
                 max: option.max,
@@ -338,7 +338,7 @@ const generateForm = (options, parentKey, levels = 0) => Object.entries(options)
         h(
             'label',
             { class: 'text-white/60 text-xs' },
-            option.type === 'range' ? `${option.label}: ${typeof inputValue === 'undefined' ? 'default server value' : inputValue}` : option.label,
+            option.type === 'range' ? `${option.label}: ${typeof inputValue === 'undefined' ? '服务器默认值' : inputValue}` : option.label,
         ),
         inputElement,
     ]);
@@ -359,13 +359,13 @@ const deletePresetHandler = () => {
     props.setIsOpen(false);
 };
 
-// watch isOpen prop
+// 监测 isOpen 支持
 watch(() => props.isOpen, (isOpen) => {
     if (isOpen) {
         resetSaveAsName();
     }
 });
-// watch client prop
+// 监测 client 支持
 watch(() => props.client, (client) => {
     if (client) {
         resetSaveAsName();
@@ -381,14 +381,14 @@ watch(() => props.client, (client) => {
 
 <template>
     <Dialog :open="isOpen" @close="setIsOpen(false)" class="relative z-50">
-        <!-- The backdrop, rendered as a fixed sibling to the panel container -->
+        <!-- 背景，作为面板容器的固定兄弟呈现 -->
         <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
 
-        <!-- Full-screen scrollable container -->
+        <!-- 全屏可滚动容器 -->
         <div class="fixed inset-0 overflow-y-auto">
-            <!-- Container to center the panel -->
+            <!-- 容器将面板居中 -->
             <div class="flex min-h-full items-center justify-center p-4">
-                <!-- The actual dialog panel -->
+                <!-- 实际对话框面板 -->
                 <DialogPanel class="w-full max-w-3xl rounded text-slate-300 bg-white/10 backdrop-blur-lg p-6 shadow-lg">
                     <button
                         @click="setIsOpen(false)"
@@ -410,11 +410,11 @@ watch(() => props.client, (client) => {
                             v-else-if="client === 'bing'"
                             class="h-10 py-2 mr-2 block shadow transition duration-300 ease-in-out rounded-lg"
                         />
-                        Settings
+                        设置
                     </DialogTitle>
 
                     <DialogDescription class="mt-3">
-                        <!-- Use generateForm function -->
+                        <!-- 使用 generateForm 函数 -->
                         <div class="flex flex-col gap-2">
                             <template
                                 v-for="(option, optionName) in availableOptions[client]"
@@ -425,7 +425,7 @@ watch(() => props.client, (client) => {
                         </div>
 
                         <div class="flex flex-col sm:flex-row justify-end mt-4 gap-2">
-                            <!-- Delete button -->
+                            <!-- 删除按钮 -->
                             <Transition name="fade">
                                 <button
                                     v-if="saveAsName === defaultSaveAsName"
@@ -439,7 +439,7 @@ watch(() => props.client, (client) => {
                                     <Icon name="bx:bx-trash" />
                                 </button>
                             </Transition>
-                            <!-- Save as Name input -->
+                            <!-- 另存为名称输入 -->
                             <div class="relative flex flex-col sm:flex-row items-stretch shadow-inner bg-white/5 rounded">
                                 <label
                                     class="
@@ -447,12 +447,12 @@ watch(() => props.client, (client) => {
                                         border-b sm:border-r sm:border-b-0
                                     "
                                 >
-                                    Preset Name
+                                    预设名称
                                 </label>
                                 <input
                                     type="text"
                                     class="placeholder-white/40 bg-transparent text-slate-300 text-sm py-2 focus:outline-none pl-3 flex-1"
-                                    placeholder="Preset Name"
+                                    placeholder="预设名称"
                                     v-model="saveAsName"
                                 />
                                 <button
@@ -475,12 +475,12 @@ watch(() => props.client, (client) => {
                                 "
                                 @click="save"
                             >
-                                <Icon name="bx:bx-save" class="relative text-lg top-[1px] ml-4" /> <span class="mr-4">Save</span>
+                                <Icon name="bx:bx-save" class="relative text-lg top-[1px] ml-4" /> <span class="mr-4">保存</span>
                             </button>
                         </div>
-                        <!-- Fine print -->
+                        <!-- 小字 -->
                         <div class="mt-2 text-xs text-white/60 text-center sm:text-right">
-                            Any changes to settings will not apply for existing conversations.
+                            对设置的任何更改都将不适用于现有的对话。
                         </div>
                     </DialogDescription>
                 </DialogPanel>
