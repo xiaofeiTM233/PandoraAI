@@ -38,7 +38,7 @@ const renderer = {
     >
         <path d="M20 2H10c-1.103 0-2 .897-2 2v4H4c-1.103 0-2 .897-2 2v10c0 1.103.897 2 2 2h10c1.103 0 2-.897 2-2v-4h4c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zM4 20V10h10l.002 10H4zm16-6h-4v-4c0-1.103-.897-2-2-2h-4V4h10v10z"></path>
     </svg>
-    <span class="copy-status">Copy</span>
+    <span class="copy-status">复制</span>
 </button>`.trim();
         return `<pre class="p-0 relative">${copyButton}<code class="hljs${language ? ` language-${language}` : ''}">${highlightedCode}</code></pre>`;
     },
@@ -86,12 +86,12 @@ const regenerateData = computed(() => {
     if (!messages.value.length) {
         return {};
     }
-    // find last index message where role = user
+    // 查找 role = user 的最后一个索引消息
     const lastUserMessageIndex = messages.value
         .map(_message => _message.role)
         .lastIndexOf('user');
     if (lastUserMessageIndex === -1) {
-        // this should never happen
+        // 这绝不应该发生
         return {};
     }
     const lastUserMessage = messages.value[lastUserMessageIndex];
@@ -107,7 +107,7 @@ const regenerateData = computed(() => {
 
 const canChangePreset = computed(() => !processingController.value && Object.keys(conversationData.value).length === 0);
 
-// compute number of rows for textarea based on message newlines, up to 7
+// 根据消息换行计算文本区域的行数，最多7行
 const inputRows = computed(() => {
     const newlines = (message.value.match(/\n/g) || []).length;
     return Math.min(newlines + 1, 7);
@@ -137,9 +137,9 @@ const setChatContainerHeight = () => {
         - heightOffset
         - chatButtonsContainerElementHeight
         - 50;
-    // set container height
+    // 设置容器高度
     messagesContainerElement.value.style.height = `${containerHeight}px`;
-    // move input container element bottom down
+    // 从底部向下移动输入容器元素
     inputContainerElement.value.style.bottom = `${heightOffset}px`;
     scrollToBottom();
 };
@@ -168,7 +168,7 @@ const sendMessage = async (input, parentMessageId = null) => {
     processingController.value = new AbortController();
     message.value = '';
 
-    // remove id === 'new' and id === 'bot-new' messages
+    // 删除id === 'new' 和id === 'bot-new' 的消息
     messages.value = messages.value.filter(_message => !['new', 'bot-new'].includes(_message.id));
 
     const userMessage = {
@@ -249,7 +249,7 @@ const sendMessage = async (input, parentMessageId = null) => {
         messages.value[botMessageIndex].parentMessageId = result.parentMessageId;
         let conversationId;
         if (result.jailbreakConversationId) {
-            // Bing jailbreak mode
+            // Bing 越狱模式
             conversationId = result.jailbreakConversationId;
             conversationData.value = {
                 jailbreakConversationId: result.jailbreakConversationId,
@@ -266,7 +266,7 @@ const sendMessage = async (input, parentMessageId = null) => {
                 parentMessageId: null,
             };
         } else {
-            // other clients
+            // 其他端
             conversationId = result.conversationId;
             conversationData.value = {
                 conversationId: result.conversationId,
@@ -327,10 +327,10 @@ const sendMessage = async (input, parentMessageId = null) => {
                 if (response.status === 200) {
                     return;
                 }
-                throw new Error(`Failed to send message. HTTP ${response.status} - ${response.statusText}`);
+                throw new Error(`发送消息失败。HTTP ${response.status} - ${response.statusText}`);
             },
             onclose() {
-                throw new Error('Failed to send message. Server closed the connection unexpectedly.');
+                throw new Error('发送消息失败。服务器意外关闭连接。');
             },
             onerror(err) {
                 throw err;
@@ -372,11 +372,11 @@ const sendMessage = async (input, parentMessageId = null) => {
 const parseMarkdown = (text, streaming = false) => {
     text = text.trim();
     let cursorAdded = false;
-    // workaround for incomplete code, closing the block if it's not closed
-    // First, count occurrences of "```" in the text
+    // 不完整代码的解决方案，如果代码块未关闭，则关闭它
+    // 首先，计算文本中 "```" 的出现次数
     const codeBlockCount = (text.match(/```/g) || []).length;
     const shouldAddClosingBlock = codeBlockCount % 2 === 1 && !text.endsWith('```');
-    // If the count is odd and the text doesn't end with "```", add a closing block
+    // 如果计数是奇数，并且文本不是以 "```" 结尾，则添加一个结束块
     if (shouldAddClosingBlock) {
         if (streaming) {
             text += '█\n```';
@@ -386,7 +386,7 @@ const parseMarkdown = (text, streaming = false) => {
         }
     }
     if (codeBlockCount && !shouldAddClosingBlock) {
-        // make sure the last "```" is on a newline
+        // 确保最后一个 "```" 在换行符上
         text = text.replace(/```$/, '\n```');
     }
     if (streaming && !cursorAdded) {
@@ -394,12 +394,12 @@ const parseMarkdown = (text, streaming = false) => {
     }
 
     try {
-        // convert to markdown
+        // 转换为 Markdown
         let parsed = marked.parse(text);
-        // format Bing's source links more nicely
-        // 1. replace "[^1^]" with "[1]" (during progress streams)
+        // 将必应的超链接格式化得更好
+        // 1. 将 "[^1^]" 替换为 "[1]"（在推送期间）
         parsed = parsed.replace(/\[\^(\d+)\^]/g, '<strong>[$1]</strong>');
-        // 2. replace "^1^" with "[1]" (after the progress stream is done)
+        // 2. 将 "^1^" 替换为 "[1]"（在推送完成后）
         parsed = parsed.replace(/\^(\d+)\^/g, '<strong>[$1]</strong>');
 
         return DOMPurify.sanitize(parsed);
@@ -416,42 +416,42 @@ const setIsClientSettingsModalOpen = (isOpen, client = null, presetName = null) 
 };
 
 function getMessagesForConversation(conversationMessages, parentMessageId, conversationOrderedMessages = []) {
-    // Check if parent message id is valid
+    // 检查父消息id是否有效
     if (parentMessageId) {
-        // Find the message object that matches parent message id asynchronously
+        // 异步查找与父消息id匹配的消息对象
         const conversationMessage = conversationMessages.find(m => m.id === parentMessageId);
-        // Push it to ordered messages array
+        // 把它推到有序的消息数组
         conversationOrderedMessages.unshift(conversationMessage);
-        // Call getMessagesForConversation again with parent message id and ordered messages as arguments
+        // 以父消息id和有序消息作为参数再次调用 getMessagesForConversation
         return getMessagesForConversation(conversationMessages, conversationMessage.parentMessageId, conversationOrderedMessages);
     }
-    // Return ordered messages array as final result
+    // 返回有序消息数组作为最终结果
     return conversationOrderedMessages;
 }
 
 if (!process.server) {
     const copyButtonListener = (e) => {
-        // check parent elements for `data-is-copy-button` attribute
+        // 检查父元素是否有 `data-is-copy-button` 属性
         let el = e.target;
         while (el) {
             if (el.dataset.isCopyButton) {
-                // get sibling code block text
+                // 获取兄弟代码块文本
                 const codeBlock = el.parentElement.querySelector('code');
                 if (!codeBlock) {
                     return;
                 }
-                // copy text to clipboard
+                // 复制文本到剪贴板
                 navigator.clipboard.writeText(codeBlock.innerText);
-                // find child element with class `copy-status`
+                // 查找类为 `copy-status` 的子元素
                 const copyStatus = el.querySelector('.copy-status');
                 if (copyStatus) {
-                    // set text to "Copied"
+                    // 将文本设置为 "Copied"
                     copyStatus.innerText = 'Copied';
                     setTimeout(() => {
                         if (!copyStatus) {
                             return;
                         }
-                        // set text back to "Copy"
+                        // 将文本设置为 "Copy"
                         copyStatus.innerText = 'Copy';
                     }, 3000);
                 }
@@ -466,7 +466,7 @@ if (!process.server) {
         nextTick(() => {
             setChatContainerHeight();
         });
-        // watch for button clicks with attribute `data-clipboard-text`
+        // 监测带有属性 `data-clipboard-text` 的按钮被点击
         document.addEventListener('click', copyButtonListener);
     });
 
@@ -476,7 +476,7 @@ if (!process.server) {
         stopProcessing();
     });
 
-    // watch inputRows for change and call `setChatContainerHeight` to adjust height
+    // 检测输入的变化和调用 `setChatContainerHeight` 来调整高度
     watch(inputRows, () => {
         nextTick(() => {
             setChatContainerHeight();
@@ -584,7 +584,7 @@ if (!process.server) {
                             shadow rounded transition duration-300 ease-in-out hover:bg-white/20
                         "
                     >
-                        Stop
+                        停止响应
                     </button>
                     <button
                         v-for="response in suggestedResponses"
@@ -641,7 +641,7 @@ if (!process.server) {
                     :rows="inputRows"
                     v-model="message"
                     @keydown.enter.exact.prevent="sendMessage(message)"
-                    placeholder="Type your message here..."
+                    placeholder="在这里输入你的信息…"
                     :disabled="!!processingController"
                     class="
                         py-4 pl-14 pr-14 rounded-l-sm text-slate-100 w-full bg-white/5
@@ -660,7 +660,7 @@ if (!process.server) {
                         && !processingController
                     "
                     @click="sendMessage(regenerateData.input, regenerateData.parentMessageId)"
-                    title="Regenerate"
+                    title="再次尝试"
                     class="
                         flex items-center flex-1
                         px-4 text-slate-300 bg-white/5
