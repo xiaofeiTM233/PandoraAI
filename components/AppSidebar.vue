@@ -26,7 +26,7 @@ const {
     updateConversationTitle,
 } = conversationsStore;
 
-// sort conversations by updatedAt timestamp
+// 根据 updatedAt 时间戳对对话进行排序
 const sortedConversations = computed(() => Object.values(conversations.value).sort((a, b) => b.updatedAt - a.updatedAt));
 
 const isConfirmingClear = ref(false);
@@ -101,7 +101,7 @@ const updateConversationTitleHandler = (event) => {
             '-translate-x-full': !isMenuOpen,
         }"
     >
-        <!-- close button -->
+        <!-- 关闭按钮 -->
         <Transition name="fade">
             <div
                 v-if="isMenuOpen || isMenuClosing"
@@ -120,9 +120,9 @@ const updateConversationTitleHandler = (event) => {
                 </button>
             </div>
         </Transition>
-        <!-- Chat threads -->
+        <!-- 对话线 -->
         <div class="p-3 pb-0">
-            <!-- New Chat -->
+            <!-- 新对话 -->
             <button
                 @click="startNewConversationHandler"
                 class="
@@ -134,13 +134,13 @@ const updateConversationTitleHandler = (event) => {
                 :class="{ 'cursor-not-allowed': !!processingController }"
             >
                     <span class="flex flex-col flex-1 text-left">
-                        <span class="text-sm font-bold text-white/80">New Chat</span>
-                        <span class="text-xs text-white/60">Click to start a new chat</span>
+                        <span class="text-sm font-bold text-white/80">新对话</span>
+                        <span class="text-xs text-white/60">点击开始新的对话</span>
                     </span>
                 <Icon name="bx:bx-plus" class="w-8 h-8"/>
             </button>
         </div>
-        <!-- Conversations -->
+        <!-- 对话 -->
         <div
             class="flex-1 flex flex-col gap-1 p-3 overflow-y-auto"
         >
@@ -182,7 +182,7 @@ const updateConversationTitleHandler = (event) => {
                                 class="flex flex-1 items-center gap-1"
                             >
                                 <input
-                                    :placeholder="conversation.title || 'New Chat'"
+                                    :placeholder="conversation.title || '新对话'"
                                     @click="e => e.stopPropagation()"
                                     ref="conversationTitleToEditInput"
                                     v-model="conversationTitleToEditValue"
@@ -211,7 +211,7 @@ const updateConversationTitleHandler = (event) => {
                                 v-else
                                 class="flex-1 truncate flex items-center gap-1"
                             >
-                                {{ conversation.title || 'New Chat' }}
+                                {{ conversation.title || '新对话' }}
                                 <button
                                     @click="e => startEditConversationTitle(conversation.id, e)"
                                     class="flex items-center justify-center text-white/30 hover:text-white/60 transition duration-300 ease-in-out"
@@ -240,7 +240,7 @@ const updateConversationTitleHandler = (event) => {
                 </div>
             </TransitionGroup>
         </div>
-        <!-- Sidebar footer -->
+        <!-- 侧边栏页脚 -->
         <div class="flex flex-col items-start gap-2 bg-black/10 p-6 min-h-[100px] text-sm">
             <button
                 @click="clearConversationsHandler"
@@ -249,7 +249,7 @@ const updateConversationTitleHandler = (event) => {
                 :class="{ 'cursor-not-allowed': !!processingController }"
             >
                 <Icon :name="isConfirmingClear ? 'bx:bx-check' : 'bx:bx-trash'" class="w-4 h-4 relative top-px"/>
-                Clear all conversations{{ isConfirmingClear ? '?' : '' }}
+                清除所有对话{{ isConfirmingClear ? '?' : '' }}
             </button>
             <div class="flex gap-3 items-center w-full">
                 <AppData/>
