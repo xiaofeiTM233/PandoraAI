@@ -293,7 +293,7 @@ const sendMessage = async (input, parentMessageId = null) => {
     };
 
     if (!stream) {
-        const result = await fetch(`${config.apiBaseUrl}/conversation`, {
+        const result = await fetch(`${config.public.apiBaseUrl}/conversation`, {
             ...opts,
             signal: processingController.value.signal,
         });
@@ -319,7 +319,7 @@ const sendMessage = async (input, parentMessageId = null) => {
     }
 
     try {
-        await fetchEventSource(`${config.apiBaseUrl}/conversation`, {
+        await fetchEventSource(`${config.public.apiBaseUrl}/conversation`, {
             ...opts,
             openWhenHidden: true,
             signal: processingController.value.signal,
@@ -402,7 +402,8 @@ const parseMarkdown = (text, streaming = false) => {
         // 2. 将 "^1^" 替换为 "[1]"（在推送完成后）
         parsed = parsed.replace(/\^(\d+)\^/g, '<strong>[$1]</strong>');
 
-        return DOMPurify.sanitize(parsed);
+        // Allow the iframe to show the images created by Bing Image Creator.
+        return DOMPurify.sanitize(parsed, { ADD_TAGS: ['iframe'], ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'srcdoc'] });
     } catch (err) {
         console.error('ERROR', err);
         return text;
@@ -763,5 +764,10 @@ input[type="range"]::-webkit-slider-thumb {
 
 input[type="range"]::-moz-range-thumb {
     @apply w-4 h-4 bg-slate-300 rounded-full;
+}
+
+/* Bing image creator iframe */
+iframe {
+    @apply bg-slate-100;
 }
 </style>

@@ -69,6 +69,7 @@ npm run preview
 2. 运行API服务器 [node-chatgpt-api](https://github.com/waylaidwanderer/node-chatgpt-api#api-server).
 3. 复制 `.env.example` 为 `.env` 然后在 `API_BASE_URL` 变量中填写API服务器的URL。
 4. 运行 `npm run dev` 启动开发服务器，或者 `npm run build` 构建用于生产的应用程序。
+  1. 如果你在拉取最新的修改后看到一个空白的页面，先运行`nuxi upgrade --force`，然后再运行`npm run dev`。
 
 ## 贡献
 如果您想为这个项目做出贡献，请创建一个拉请求，并详细描述您的更改。
