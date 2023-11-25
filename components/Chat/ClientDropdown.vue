@@ -37,7 +37,7 @@ const scrollToActivePreset = () => {
     const presetsDiv = document.querySelector('.presets');
     const activePreset = document.querySelector('.presets .active');
     if (presetsDiv && activePreset) {
-        // check if active preset is out of view
+        // 检查活动预设是否在视图之外
         const presetsDivRect = presetsDiv.getBoundingClientRect();
         const activePresetRect = activePreset.getBoundingClientRect();
         const topDiff = activePresetRect.top - presetsDivRect.top;
@@ -47,7 +47,7 @@ const scrollToActivePreset = () => {
             (topDiff < 0 && Math.abs(topDiff) > allowableDiff)
             || (bottomDiff < 0 && Math.abs(bottomDiff) > allowableDiff)
         ) {
-            // scroll to active preset
+            // 滚动到活动预设
             presetsDiv.scrollTop = activePreset.offsetTop - presetsDiv.offsetTop;
         }
     }
@@ -69,7 +69,7 @@ onMounted(() => {
         class="flex flex-col absolute bottom-full w-full overflow-hidden backdrop-blur"
     >
         <div class="flex items-center justify-start gap-2 shadow-sm bg-white/[15%] text-white/80 text-sm rounded-t py-1 px-3">
-            Presets
+            预设
         </div>
         <div class="presets flex flex-col items-stretch bg-white/10 overflow-auto max-h-[160px]">
             <div class="w-full flex flex-row">

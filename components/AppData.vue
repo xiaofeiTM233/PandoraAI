@@ -10,7 +10,7 @@ const importAppData = () => {
     if (processingController.value) {
         return;
     }
-    // get JSON file from user and turn it into localStorage
+    // 从用户获取 JSON 文件，并将其转换为 localStorage
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'application/json';
@@ -38,7 +38,7 @@ const exportAppData = () => {
     if (processingController.value) {
         return;
     }
-    // turn localStorage into JSON and save it as a file
+    // 将 localStorage 转换为 JSON 并另存为为文件
     const dataStr = JSON.stringify(localStorage);
     const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
 
@@ -59,7 +59,7 @@ const exportAppData = () => {
         :class="{ 'cursor-not-allowed': !!processingController }"
     >
         <Icon class="w-4 h-4" name="bx:bx-import" />
-        Import
+        导入
     </button>
     <button
         @click="exportAppData"
@@ -68,6 +68,6 @@ const exportAppData = () => {
         :class="{ 'cursor-not-allowed': !!processingController }"
     >
         <Icon class="w-4 h-4" name="bx:bx-export" />
-        Export
+        导出
     </button>
 </template>

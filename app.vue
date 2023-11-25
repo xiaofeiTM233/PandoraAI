@@ -35,13 +35,13 @@ onMounted(() => {
 </script>
 
 <template>
-    <a
+    <!--a
         href="https://github.com/waylaidwanderer/PandoraAI"
         target="_blank"
         id="fork-corner"
         class="fork-corner fc-size-small fc-pos-tr fc-animate fc-theme-github"
         title="Fork me on GitHub"
-    ></a>
+    ></a-->
     <div class="flex flex-row min-h-screen text-slate-300">
         <AppSidebar/>
         <Transition name="fade">
@@ -94,10 +94,11 @@ onMounted(() => {
             </main>
             <footer class="px-3 pb-6 text-center">
                 <span class="text-xs font-light text-slate-400">
-                    powered by
+                    本站由
                     <a href="https://github.com/waylaidwanderer/node-chatgpt-api" target="_blank">
-                        https://github.com/waylaidwanderer/node-chatgpt-api
+                        PandoraAI
                     </a>
+                    驱动
                 </span>
             </footer>
         </div>
